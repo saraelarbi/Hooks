@@ -1,23 +1,47 @@
-import logo from './logo.svg';
+import { useState } from "react";
 import './App.css';
+import { moviedata } from "./data";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import MovieList from "./Components/MovieList/MovieList";
+import AddMovie from "./Components/AddMovie/AddMovie";
+import NavBarr from "./Components/NavBarr/NavBarr";
+
+
 
 function App() {
+  const [movielist, setMovielist] = useState(moviedata);
+  const [title, setTitle] = useState("");
+
+  const handleChange = (e) => {
+    setTitle(e.target.value);
+  }
+
+  const [rate, setRate] = useState(0);
+  const ratingChanged = (newRating) => {
+    setRate(newRating);
+  }
+
+  const handleAdd = (newMovie) => {
+    setMovielist([...movielist, newMovie]);
+  }
+
+  //Delete movie from list of movies
+  const handleDelete = (id) => {
+    setMovielist(movielist.filter((movie) => movie.id !== id))
+  }
+
+  /* const routes = {
+    "/": () => <Home />,
+  "/about": () => <MovieList movies={movielist.filter((movie) => movie.title.toUpperCase().includes(title.toUpperCase()) && movie.rate >= rate)} handleDelete={handleDelete} />,
+  "/contact": () => <AddMovie handleAdd={handleAdd} />
+  } */
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <NavBarr title={title} handleChange={handleChange} rate={rate} ratingChanged={ratingChanged} />
+        <MovieList movies={movielist.filter((movie) => movie.title.toUpperCase().includes(title.toUpperCase()) && movie.rate >= rate)} handleDelete={handleDelete} />
+        <AddMovie handleAdd={handleAdd} />
+    
     </div>
   );
 }
