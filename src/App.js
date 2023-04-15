@@ -5,6 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MovieList from "./Components/MovieList/MovieList";
 import AddMovie from "./Components/AddMovie/AddMovie";
 import NavBarr from "./Components/NavBarr/NavBarr";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Home from "./Components/NavBarr/Home";
+import Details from "./Components/Details/Details";
+import Login from "./Components/NavBarr/Login";
 
 
 
@@ -38,9 +42,16 @@ function App() {
 
   return (
     <div className="App">
-    <NavBarr title={title} handleChange={handleChange} rate={rate} ratingChanged={ratingChanged} />
+    <Router>
+        <NavBarr title={title} handleChange={handleChange} rate={rate} ratingChanged={ratingChanged} />
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/movielist/:id" render={(props) => <Details {...props} mvlst={movielist} />} />
+        </Switch>
         <MovieList movies={movielist.filter((movie) => movie.title.toUpperCase().includes(title.toUpperCase()) && movie.rate >= rate)} handleDelete={handleDelete} />
         <AddMovie handleAdd={handleAdd} />
+      </Router>
     
     </div>
   );
